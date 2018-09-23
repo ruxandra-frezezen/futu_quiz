@@ -28,6 +28,24 @@
 <script>
 "use strict";
 
+//add a counter for questions
+var currentQuestionNo = (function() {
+    var counter = 0;
+    return {
+        increment: function() {counter += 1; return counter;},
+        getCounterValue: function() {return counter;}
+    }  
+})();
+
+//add a counter for correct answers
+var correctAnswersNo = (function() {
+    var counter = 0;
+    return {
+        increment: function() {counter += 1; return counter;},
+        getCounterValue: function() {return counter;}
+    }  
+})();
+
 //question structure
 var myQuizQuestions = (function quizQuestions() {
     var myQuestion;
@@ -101,11 +119,31 @@ function getQuestions(xhttp){
 }
 
 function loadNextQuestion(){
-    //TO DO
+    var qIndex = 0, nextIndex = 0, totalQ = 0, remainingQ = 0, correctQ = 0;
+    nextIndex = currentQuestionNo.increment();
+    qIndex = nextIndex - 1;
+    totalQ = myQuizQuestions.getQuestionsNo();
+    remainingQ = totalQ - nextIndex + 1;
+    correctQ = correctAnswersNo.getCounterValue();
+       
+    if(totalQ >= nextIndex) {
+        //if there are questions left 
+        document.getElementById("questionnumber").innerHTML = nextIndex;	
+        document.getElementById("questiontext").innerHTML = myQuizQuestions.getQuestionText(qIndex); 
+        document.getElementById("remainingquestions").innerHTML = remainingQ;
+    } else {
+        //if there are no more questions left
+        document.getElementById("remainingquestions").innerHTML = 0;
+        document.getElementById("questiontitle").innerHTML = "&nbsp;";
+        document.getElementById("questionContent").innerHTML = "<h3>The results are in:<br /></h3>" +
+            "<p>You answered correctly " + correctQ + " out of " + totalQ + " questions!</p>" +
+            "<a href='Default.html'>New Quiz</a>";
+    }	
 }
 
 function checkAnswer(){
-    //TO DO
+    //TO DO: check Answer and set no of correct answers
+    loadNextQuestion();
 }
 
 //call this to return to main page if there is a problem with getting the questions or the answers
