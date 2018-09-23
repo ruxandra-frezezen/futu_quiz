@@ -118,6 +118,30 @@ function getQuestions(xhttp){
     }
 }
 
+function getAnswer(xhttp) {
+    var myObj, myAnswer;
+    if(xhttp.responseText) {
+        try {
+            myObj = JSON.parse(xhttp.responseText);
+            if(document.getElementById("answertextbox")) {
+                myAnswer = document.getElementById("answertextbox").value; 
+            } else {
+                myAnswer = "";
+            }
+            //if user answer is correct increment counter and display  
+            if(myObj.answer == myAnswer) {
+                document.getElementById("correctanswers").innerHTML = correctAnswersNo.increment();
+            }
+            loadNextQuestion();
+        } 
+        catch(e) {
+            returnToMainPage();  
+        }
+    } else {
+        returnToMainPage();  
+    }
+}
+
 function loadNextQuestion(){
     var qIndex = 0, nextIndex = 0, totalQ = 0, remainingQ = 0, correctQ = 0;
     nextIndex = currentQuestionNo.increment();
@@ -131,6 +155,7 @@ function loadNextQuestion(){
         document.getElementById("questionnumber").innerHTML = nextIndex;	
         document.getElementById("questiontext").innerHTML = myQuizQuestions.getQuestionText(qIndex); 
         document.getElementById("remainingquestions").innerHTML = remainingQ;
+        document.getElementById("answertextbox").value = "";        
     } else {
         //if there are no more questions left
         document.getElementById("remainingquestions").innerHTML = 0;
@@ -142,8 +167,9 @@ function loadNextQuestion(){
 }
 
 function checkAnswer(){
-    //TO DO: check Answer and set no of correct answers
-    loadNextQuestion();
+    var qIndex = 0;
+    qIndex = currentQuestionNo.getCounterValue();
+    loadInfo("https://futu-quiz-api.now.sh/answer/" + qIndex, getAnswer);
 }
 
 //call this to return to main page if there is a problem with getting the questions or the answers
