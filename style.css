@@ -92,11 +92,31 @@ body {
 }
 
 #answertextbox {
-	width:50%;
+	width:75%;
     margin: 0 auto;	    
 	padding: 4px;
 }
 
 #questiontitle {
     line-height: 1.6;
+}
+
+/* label for radio buttons */
+.radiocontainer {
+    display: block;
+    position: relative;
+    padding-left: 4px;
+    cursor: pointer;
+    text-align: left;    
+    color: white;
+    background-color: rgba(40, 77, 00, 0.5);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Change background color on hover*/
+.radiocontainer:hover {
+  background-color: #407700;
 }

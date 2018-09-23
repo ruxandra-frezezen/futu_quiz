@@ -63,7 +63,9 @@ var myQuizQuestions = (function quizQuestions() {
             return(myQuestion[i].question);
         },
         getQuestionChoices: function(i) {
-            return(myQuestion[i].choices);
+            if(myQuestion[i].hasOwnProperty("choices")) {
+                return(myQuestion[i].choices);
+            }    
         }
     }	
 })();
@@ -119,17 +121,24 @@ function getQuestions(xhttp){
 }
 
 function getAnswer(xhttp) {
-    var myObj, myAnswer;
+    var myObj = {}, myAnswer = "";
     if(xhttp.responseText) {
         try {
             myObj = JSON.parse(xhttp.responseText);
             if(document.getElementById("answertextbox")) {
                 myAnswer = document.getElementById("answertextbox").value; 
             } else {
-                myAnswer = "";
+                var radios = document.getElementsByName("answerchoice");
+                var i = 0, len = radios.length;  
+                for (i = 0; i < len; i++) {
+                    if (radios[i].checked) {
+                        myAnswer = radios[i].value;
+                        break;
+                    }
+                }
             }
             //if user answer is correct increment counter and display  
-            if(myObj.answer == myAnswer) {
+            if(myObj.answer.toUpperCase() === myAnswer.toUpperCase()) {
                 document.getElementById("correctanswers").innerHTML = correctAnswersNo.increment();
             }
             loadNextQuestion();
@@ -155,7 +164,19 @@ function loadNextQuestion(){
         document.getElementById("questionnumber").innerHTML = nextIndex;	
         document.getElementById("questiontext").innerHTML = myQuizQuestions.getQuestionText(qIndex); 
         document.getElementById("remainingquestions").innerHTML = remainingQ;
-        document.getElementById("answertextbox").value = "";        
+
+        //check if I have choices and add radio buttons or text input
+        if(myQuizQuestions.getQuestionChoices(qIndex)) {
+            var myQuestionChoices = [], choicesLength = 0, i = 0;
+            myQuestionChoices = myQuizQuestions.getQuestionChoices(qIndex);
+            choicesLength = myQuestionChoices.length;
+            document.getElementById("answerbox").innerHTML = '';
+            for (i = 0; i < choicesLength; i++) {
+                document.getElementById("answerbox").innerHTML += '<label class="radiocontainer"><input type="radio" name="answerchoice" value="' + myQuestionChoices[i] + '" /> ' + myQuestionChoices[i] + '</label><br />';
+            }
+        } else {
+            document.getElementById("answerbox").innerHTML = '<input type="text" id="answertextbox" value="" maxlength="100" placeholder="Your answer is..." />';
+        }
     } else {
         //if there are no more questions left
         document.getElementById("remainingquestions").innerHTML = 0;
