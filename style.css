@@ -96,3 +96,7 @@ body {
     margin: 0 auto;	    
 	padding: 4px;
 }
+
+#questiontitle {
+    line-height: 1.6;
+}

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>friquiz</title>
+  <title>Quiz</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -9,21 +9,112 @@
 <body>
   <div class="sidenav">
     <a href="Default.html">New Quiz</a>
-    <p>Correct:<span id="correctanswers">-</span></p>
-    <p>Left:<span id="remaininganswers">-</span></p>
+    <p>Correct: <span id="correctanswers">0</span></p>
+    <p>Left: <span id="remainingquestions"></span></p>
   </div>
   <div class="content">
-    <h2>Question <span id="questionnumber">-</span> of <span id="questiontotalnumber">-</span></h2>
+    <h2 id="questiontitle">Question <span id="questionnumber"></span> of <span id="questiontotalnumber"></span></h2>
     <div class="container">
-      <div class="mainbox">
-        <p id="questiontext">Insert Question text here :)</p>
+      <div class="mainbox" id="questionContent">
+        <div id="questiontext">Insert Question text here :)</div>
 	    <br /><br /><hr /><br />
 	    <div id="answerbox">
 		  <input type="text" id="answertextbox" value="" maxlength="100" placeholder="Your answer is..." />
         </div>
-        <a href="#">NEXT >></a>
+        <a href="javascript:checkAnswer();">NEXT >></a>
       </div>
     </div>
   </div>
+<script>
+"use strict";
+
+//question structure
+var myQuizQuestions = (function quizQuestions() {
+    var myQuestion;
+    return {
+        setQuestion: function(mObj) {
+            myQuestion = mObj;
+        },
+        getQuestionsNo: function() {
+            return(Object.keys(myQuestion).length);
+        },
+        getQuestionId: function(i) {
+            return(myQuestion[i].id);
+        },
+        getQuestionText: function(i) {
+            return(myQuestion[i].question);
+        },
+        getQuestionChoices: function(i) {
+            return(myQuestion[i].choices);
+        }
+    }	
+})();
+
+//get needed data from API
+function loadInfo(url, callback) {
+    var xhttp;
+    xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        switch(xhttp.readyState) {
+            case 2:
+                try {
+                    if(xhttp.status != 200) {
+                        xhttp.abort();
+                        throw "Request aborted";
+                    }
+                }
+                catch(e) {
+                    returnToMainPage();
+                }
+                break;
+            case 4:
+                if(xhttp.status == 200) {
+                    callback(xhttp);
+                }
+                break;
+            default: break; 
+        } 
+    };
+    xhttp.open("GET", url, true);
+    xhttp.send();
+}
+
+//parse the response from the API 
+function getQuestions(xhttp){
+    var myObj;  
+    if(xhttp.responseText) {
+        try {
+            myObj = JSON.parse(xhttp.responseText);
+            //set result into myQuizQuestions
+            myQuizQuestions.setQuestion(myObj);  
+            //show total number of questions
+            document.getElementById("questiontotalnumber").innerHTML = myQuizQuestions.getQuestionsNo();
+            //load first question
+            loadNextQuestion();
+        } 
+        catch(e) {
+            returnToMainPage();  
+        }
+    } else {
+        returnToMainPage();  
+    }
+}
+
+function loadNextQuestion(){
+    //TO DO
+}
+
+function checkAnswer(){
+    //TO DO
+}
+
+//call this to return to main page if there is a problem with getting the questions or the answers
+function returnToMainPage(){
+    window.location.href = "Default.html";
+}
+
+//call loadInfo to get the questions from the API
+loadInfo("https://futu-quiz-api.now.sh/questions", getQuestions);
+</script>  
 </body>
 </html>
