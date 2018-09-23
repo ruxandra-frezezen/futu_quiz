@@ -13,7 +13,7 @@
     <p>Left: <span id="remainingquestions"></span></p>
   </div>
   <div class="content">
-    <h2 id="questiontitle">Question <span id="questionnumber"></span> of <span id="questiontotalnumber"></span></h2>
+    <h2 id="questiontitle"></span></h2>
     <div class="container">
       <div class="mainbox" id="questionContent">
         <div id="questiontext"></div>
@@ -101,7 +101,9 @@ function loadInfo(url, callback) {
                     callback(xhttp);
                 }
                 break;
-            default: break; 
+            default: 
+                document.getElementById("questiontitle").innerHTML = "Loading...";
+                break; 
         } 
     };
     xhttp.open("GET", url, true);
@@ -116,8 +118,6 @@ function getQuestions(xhttp){
             myObj = JSON.parse(xhttp.responseText);
             //set result into myQuizQuestions
             myQuizQuestions.setQuestion(myObj);  
-            //show total number of questions
-            document.getElementById("questiontotalnumber").innerHTML = myQuizQuestions.getQuestionsNo();
             //load first question
             loadNextQuestion();
         } 
@@ -170,7 +170,7 @@ function loadNextQuestion(){
        
     if(totalQ >= nextIndex) {
         //if there are questions left 
-        document.getElementById("questionnumber").innerHTML = nextIndex;	
+        document.getElementById("questiontitle").innerHTML = "Question " + nextIndex + " of " + totalQ;
         document.getElementById("questiontext").innerHTML = myQuizQuestions.getQuestionText(qIndex); 
         document.getElementById("remainingquestions").innerHTML = remainingQ;
 
