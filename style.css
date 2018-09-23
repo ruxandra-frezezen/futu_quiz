@@ -1,15 +1,15 @@
 /*Include padding and border in the element's total width and height*/
 * {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;    
-	box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;    
+    box-sizing: border-box;
 }
 
 html { height: 100%; }
 
 body {
     height: 100%;
-	margin: 0;
+    margin: 0;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -61,9 +61,9 @@ body {
     position: absolute;
     padding:20px 20px 65px 20px;
     min-height: 320px;
-	width:100%;
+    width:100%;
     text-align: left;
-	background-color: #ddd;
+    background-color: #ddd;
     color: black;	
 }
 
@@ -87,14 +87,14 @@ body {
 }
 
 .mainbox div {
-	width:100%;
-	text-align: center;
+    width:100%;
+    text-align: center;
 }
 
 #answertextbox {
-	width:75%;
+    width:75%;
     margin: 0 auto;	    
-	padding: 4px;
+    padding: 4px;
 }
 
 #questiontitle {
@@ -118,10 +118,10 @@ body {
 
 /* Change background color on hover*/
 .radiocontainer:hover {
-  background-color: #407700;
+    background-color: #407700;
 }
 
 /* Background color when selected*/
 .radiocontainerselected {
-  background-color: rgba(40, 77, 00, 1);
+    background-color: rgba(40, 77, 00, 1);
 }
