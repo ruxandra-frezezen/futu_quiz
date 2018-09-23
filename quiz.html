@@ -172,7 +172,9 @@ function loadNextQuestion(){
             choicesLength = myQuestionChoices.length;
             document.getElementById("answerbox").innerHTML = '';
             for (i = 0; i < choicesLength; i++) {
-                document.getElementById("answerbox").innerHTML += '<label class="radiocontainer"><input type="radio" name="answerchoice" value="' + myQuestionChoices[i] + '" /> ' + myQuestionChoices[i] + '</label><br />';
+                document.getElementById("answerbox").innerHTML += '<label for="radio_' + i + '" class="radiocontainer">' +
+                    '<input type="radio" name="answerchoice" value="' + myQuestionChoices[i] + '" id="radio_' + i + 
+                    '" onClick = "javascript:OnClickRadio();" />' + myQuestionChoices[i] + '</label><br />';
             }
         } else {
             document.getElementById("answerbox").innerHTML = '<input type="text" id="answertextbox" value="" maxlength="100" placeholder="Your answer is..." />';
@@ -185,6 +187,21 @@ function loadNextQuestion(){
             "<p>You answered correctly " + correctQ + " out of " + totalQ + " questions!</p>" +
             "<a href='Default.html'>New Quiz</a>";
     }	
+}
+
+//update background-color for radio button labels based on selected value
+function OnClickRadio() {
+    var radios = document.getElementsByName("answerchoice");
+    var i = 0, len = radios.length;  
+    for (i = 0; i < len; i++) {
+        var selector = 'label[for=' + radios[i].id + ']';
+        var label = document.querySelector(selector);
+        if (radios[i].checked) {
+            label.className = "radiocontainer radiocontainerselected";
+        } else {
+            label.className = "radiocontainer";
+        }
+    }
 }
 
 function checkAnswer(){

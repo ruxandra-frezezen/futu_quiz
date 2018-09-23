@@ -120,3 +120,8 @@ body {
 .radiocontainer:hover {
   background-color: #407700;
 }
+
+/* Background color when selected*/
+.radiocontainerselected {
+  background-color: rgba(40, 77, 00, 1);
+}
